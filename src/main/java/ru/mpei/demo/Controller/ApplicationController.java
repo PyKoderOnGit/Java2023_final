@@ -17,7 +17,7 @@ public class ApplicationController {
 
     @PostMapping("/data/upload")
     public void uploadFile(@RequestParam MultipartFile file) {
-//        service.parseMeasurementFile(file);
+        service.parseMeasurementFile(file);
         log.info("File is uploaded!");
     };
 
@@ -29,8 +29,14 @@ public class ApplicationController {
 
     @GetMapping("/data/findFault")
     public void receiveSearchIndexes(@RequestParam int startIndex, int endIndex) {
-        service.findFaultInInterval(startIndex, endIndex);
-        log.info("SearchIndexes are received: "+ startIndex +", "+endIndex);
+        log.info("SearchIndexes are received: " + startIndex + ", " + endIndex);
+        String faultyPhases = service.findFaultInInterval(startIndex, endIndex);
+        if (faultyPhases.length() > 0) {
+            log.info("Detected faults: " + faultyPhases);
+        } else {
+            log.info("Faults was not detected!");
+        }
+        System.out.println(faultyPhases);
     }
 
 }
